@@ -1,0 +1,16 @@
+/*
+@startuml
+autonumber
+title Server-directed CRL Transfer
+participant "Device" as DEV
+participant "Credential\nManagement\nService" as CMS
+note over CMS, DEV
+The Ownership Credential should be used to establish a secure connection.
+end note
+DEV->CMS: GET /oic/r/crl?tupdate='NULL' or UTCTIME
+CMS->DEV: POST /oic/r/crl\n [{"crlid":"…",\n "tupdate":"…",\n "crldata": "DER-encoded CRL in base64"
+CMS->DEV: RSP 2.04
+DEV->CMS: UPDATE /oic/sec/pstat [{..., "cm"="bx0010,0000", ...}]
+CMS->DEV: RSP 2.04
+@enduml
+*/
