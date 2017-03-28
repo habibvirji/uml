@@ -1,7 +1,7 @@
 /*
 @startuml
 autonumber
-title OIC Device Owner Establishment Sequence \n"Random PIN" Device Owner Transfer Method
+title OCF Device Owner Establishment Sequence \n"Random PIN" Device Owner Transfer Method
 participant "Onboarding Tool\n(UUID B0B0xxxx-...)" as OT
 participant "New Device\n(UUID A21Cxxxx-...)" as ND
 
@@ -9,9 +9,9 @@ participant "New Device\n(UUID A21Cxxxx-...)" as ND
 note over OT, ND
 Find new devices that are unowned and choose the Random PIN owner transfer method.
 end note
-OT->ND: GET /oic/sec/doxm?owned="FALSE"
+OT->ND: GET /oic/r/doxm?owned="FALSE"
 ND->OT: RSP [{"oxms":["0","1"], "owned":"FALSE", "deviceuuid":{"A21CXXXX-..."},...}]
-OT->ND: POST /oic/sec/doxm [{..., "oxmsel":"1",...}]
+OT->ND: POST /oic/r/doxm [{..., "oxmsel":"1",...}]
 ND->OT: RSP 2.04
 
 ==Perform oic.sec.oxm.rdp method==
@@ -33,7 +33,7 @@ end
 note over OT, ND
 Obtain doxm properties again, using the secure session.
 end note
-OT->ND: GET /oic/sec/doxm
+OT->ND: GET /oic/r/doxm
 ND->OT: RSP [{"oxms":["0","1"], "owned":"FALSE", "deviceuuid":{"A21CXXXX-..."},...}]
 note over OT, ND
 The OBT verifies the doxm properties match those retrieved before the authenticated connection
@@ -43,15 +43,15 @@ end note
 note over OT, ND
 Onboarding tool tells new device how provisioning will be achieved.
 end note
-OT->ND: GET /oic/sec/pstat
+OT->ND: GET /oic/r/pstat
 ND->OT: RSP [{"isop":"FALSE", "cm":"bx0011,1110", "tm":"bx0011,1100", "om":"bx0000,0000", "sm":"bx0000,0110"}]
-OT->ND: POST /oic/sec/pstat [{..., "om":"bx0000,0100",...}]
+OT->ND: POST /oic/r/pstat [{..., "om":"bx0000,0100",...}]
 ND->OT: RSP 2.04
 
 note over OT, ND
 Onboarding tool posts the device owner ID.
 end note
-OT->ND: POST /oic/sec/doxm[{..., "devowner":"B0B0XXXX-...",...}]
+OT->ND: POST /oic/r/doxm[{..., "devowneruuid":"B0B0XXXX-...",...}]
 ND->OT: RSP 2.04
 
 note over OT, ND
