@@ -7,7 +7,7 @@ participant "Server" as SER
 note over CLI, SER
 A secure connection must be established using a certificate credential to authenticate the client
 end note
-CLI->SER: UPDATE /oic/r/roles\n [{"credid":"…", "sub":"…", "credtype":8,\n"pbdata": " DER-encoded role and CA certificate chain in base64",\n "roleid":{"authority":"Optional Authority Identifier", "role": "16-byte octet string"}, \n "ownrs":"…"\n}]
+CLI->SER: UPDATE /oic/sec/roles\n [{"credid":"…", "sub":"…", "credtype":8,\n"pbdata": " DER-encoded role and CA certificate chain in base64",\n "roleid":{"authority":"Optional Authority Identifier", "role": "16-byte octet string"}, \n "ownrs":"…"\n}]
 SER->CLI: RSP 2.04
 @enduml
 */
