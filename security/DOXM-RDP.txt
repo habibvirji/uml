@@ -33,7 +33,7 @@ end
 note over OT, ND
 Obtain doxm properties again, using the secure session.
 end note
-OT->ND: GET /oic/se/doxm
+OT->ND: GET /oic/sec/doxm
 ND->OT: RSP [{"oxms":["0","1"], "owned":"FALSE", "deviceuuid":{"A21CXXXX-..."},...}]
 note over OT, ND
 The OBT verifies the doxm properties match those retrieved before the authenticated connection
