@@ -9,16 +9,16 @@ participant "New\n Device" as ND
 note over PT, ND
 Precondition: Device is owned and supports server-led provisioning
 end note
-ND->ND: Verify /oic/r/doxm.owned=TRUE
-ND->ND: Verify /oic/r/doxm.om=bx0000,0000
-ND->ND: Verify /oic/r/pstat.tm=bx0000,0000
-ND->ND: Verify /oic/r/pstat.cm=bx0011,1100
+ND->ND: Verify /oic/sec/doxm.owned=TRUE
+ND->ND: Verify /oic/sec/doxm.om=bx0000,0000
+ND->ND: Verify /oic/sec/pstat.tm=bx0000,0000
+ND->ND: Verify /oic/sec/pstat.cm=bx0011,1100
 
 ==Begin Device Led Provisioning - Multiple Provisioning Services ==
 PT<->ND: Open a secure session with Provisioning Tool
-ND->PT: GET /oic/r/cred
+ND->PT: GET /oic/sec/cred
 PT->ND: RSP [{"credid":"0", "subjectuuid":"uuidBSS","roleid":"","credtype":"1", Etc... },\n {"credid":"1", "subjectuuid":"uuidAPS","roleid":"","credtype":"1", Etc... },\n {"credid":"2", "subjectuuid":"uuidCMS","roleid":"","credtype":"1", Etc... },\n {"credif":"3", "subjectuuid":"uuidAMS","roledid":"","credtype":"1", Etc... }
-ND->ND: /oic/r/pstat.cm=bx0011,0000
+ND->ND: /oic/sec/pstat.cm=bx0011,0000
 ND->PT: Close DTLS session
 @enduml
 
@@ -33,9 +33,9 @@ note over CMS, ND
 New device obtains credentials from its assigned Credential Provisioning Service
 end note
 ND->CMS: Open DTLS session with CMS
-ND->CMS: GET /oic/r/cred?CredID > 3
+ND->CMS: GET /oic/sec/cred?CredID > 3
 CMS->ND: RSP {"credid":"4", "subjectuuid":"uuidD1","roleid":"","credtype":"1", Etc... },\n  {"credid":"5", "subjectuuid":"uuidD2","roleid":"", "credtype":"1", Etc... },\n { Etc...}]
-ND->ND: /oic/r/pstat.cm=bx0010,0000
+ND->ND: /oic/sec/pstat.cm=bx0010,0000
 ND<->CMS: Close DTLS Session
 
 @enduml
@@ -50,13 +50,13 @@ note over APS, ND
 New device obtains ACLs from its assigned ACL Provisioning Service
 end note
 ND->APS: Open DTLS session with APS
-ND->APS: GET /oic/r/acl
+ND->APS: GET /oic/sec/acl
 APS->ND: RSP ["aclist":[{"subjectuuid":"uuidD1","resource":["/a/resource1"], "permission":"_RUD_", "validity":" "}], "rowneruuid":"oic.sec.aps"}],\n "aclist":[{"subjectuuid":"uuidD2","resource":["/a/resource2"], "permission":"_R___", ...}, {Etc...}]
-ND->APS: GET /oic/r/sacl
+ND->APS: GET /oic/sec/sacl
 APS->ND: RSP ["aclist":[{"subjectuuid":"uuidD3","resource":["/a/resource3"], "permission":"_RUD_", "validity":" "}], "rowneruuid":"oic.sec.aps"},\n "aclist":[{"subjectuuid":"uuidD4","resource":["/a/resource4"], "permission":"_R___", ...}], "signature":"<SIGNATURE>"]
-ND->APS: GET /oic/r/amacl
+ND->APS: GET /oic/sec/amacl
 APS->ND: RSP ["resource":[{"/a/resource5"}, {/a/resource6}, {"/a/resource7"}]]
-ND->ND: /oic/r/pstat.cm=bx0000,0000 
+ND->ND: /oic/sec/pstat.cm=bx0000,0000 
 ND<->APS: Close DTLS Session
 
 @enduml
