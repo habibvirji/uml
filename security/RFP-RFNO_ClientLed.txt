@@ -8,20 +8,20 @@ participant "New Device" as ND
 note over PT, ND
 New Device is owned and supports client-led provisioning.
 end note
-PT->ND: GET /oic/r/doxm?owned="TRUE"
+PT->ND: GET /oic/sec/doxm?owned="TRUE"
 ND->PT: RSP [{..., "owned":"FALSE",  "deviceuuid":"A21C-E000-0000-0000",...}]
-PT->ND: GET /oic/r/pstat
+PT->ND: GET /oic/sec/pstat
 ND->PT: RSP [{..., "om":"bx0000,0011", ...}]
 ==Provision Credential Resources ==
-PT->ND: PUT /oic/r/cred [{"subjectuuid":"uuidAPS", "credtype":"<psk>", "privatedata":"<psk>", etc...},\n {"subjectuuid":"uuidAMS","credtype":"<psk>", "privatedata":"<psk>", etc...}]
+PT->ND: PUT /oic/sec/cred [{"subjectuuid":"uuidAPS", "credtype":"<psk>", "privatedata":"<psk>", etc...},\n {"subjectuuid":"uuidAMS","credtype":"<psk>", "privatedata":"<psk>", etc...}]
 ND->PT: RSP 2.01
-PT->ND: PUT /oic/r/pstat [{ ... "cm"="bx0010,0000" ...}]
+PT->ND: PUT /oic/sec/pstat [{ ... "cm"="bx0010,0000" ...}]
 ND->PT: RSP 2.04
 
 ==Provision ACL Resources ==
-PT->ND: GET /oic/r/acl ["aclist":{"subjectuuid":"uuidD1","resources":["/a/resource1"], "permission":"_RUD_", "validity":" "}, "rowneruuid":"uuid"},\n "aclist":{"subjectuuid":"uuidD2","resources":["/a/resource2"], permission":"_R___", ...}, {Etc...}]
+PT->ND: GET /oic/sec/acl ["aclist":{"subjectuuid":"uuidD1","resources":["/a/resource1"], "permission":"_RUD_", "validity":" "}, "rowneruuid":"uuid"},\n "aclist":{"subjectuuid":"uuidD2","resources":["/a/resource2"], permission":"_R___", ...}, {Etc...}]
 ND->PT: RSP 2.01
-PT->ND: PUT /oic/r/pstat [{ ... "om":"bx0000,0000", ... }]
+PT->ND: PUT /oic/sec/pstat [{ ... "om":"bx0000,0000", ... }]
 
 PT<->ND: Close DTLS Session
 
