@@ -1,3 +1,4 @@
+/*
 @startuml
 autonumber
 title OCF Client Led Provisioning\n with a Single Service Provider
@@ -8,21 +9,21 @@ participant "New Device" as ND
 note over PT, ND
 New Device is owned and supports client-led provisioning.
 end note
-PT->ND: GET /oic/sec/doxm?owned="TRUE"
-ND->PT: RSP [{..., "owned":"FALSE",  "deviceuuid":"A21C-E000-0000-0000",...}]
+PT->ND: GET /oic/sec/doxm?owned=TRUE
+ND->PT: RSP {"owned":FALSE, "deviceuuid":"A21C-E000-0000-0000",...}
 PT->ND: GET /oic/sec/pstat
-ND->PT: RSP [{..., "om":"bx0000,0011", ...}]
+ND->PT: RSP {"om":0b0000,0100}
+
 ==Provision Credential Resources ==
-PT->ND: PUT /oic/sec/cred [{"subjectuuid":"uuidAPS", "credtype":"<psk>", "privatedata":"<psk>", etc...},\n {"subjectuuid":"uuidAMS","credtype":"<psk>", "privatedata":"<psk>", etc...}]
-ND->PT: RSP 2.01
-PT->ND: PUT /oic/sec/pstat [{ ... "cm"="bx0010,0000" ...}]
+PT->ND: PUT /oic/sec/cred {"creds":[{"subjectuuid":"A21CXXXX-APS", "credtype":1, "privatedata":"<psk>", etc...},\n{"subjectuuid":"A21CXXXX-AMS","credtype":1, "privatedata":"<psk>", etc...}], "rowneruuid":"B0B0XXXX-..."}}
+ND->PT: RSP 2.04
+PT->ND: PUT /oic/sec/pstat {"cm":0b0010,0000}
 ND->PT: RSP 2.04
 
 ==Provision ACL Resources ==
-PT->ND: GET /oic/sec/acl ["aclist":{"subjectuuid":"uuidD1","resources":["/a/resource1"], "permission":"_RUD_", "validity":" "}, "rowneruuid":"uuid"},\n "aclist":{"subjectuuid":"uuidD2","resources":["/a/resource2"], permission":"_R___", ...}, {Etc...}]
-ND->PT: RSP 2.01
-PT->ND: PUT /oic/sec/pstat [{ ... "om":"bx0000,0000", ... }]
-
+PT->ND: GET /oic/sec/acl2 {"aclist2":[{"subject":"A21CXXXX1-...","resources":[{"href":"/a/resource1"}], "permission":_RUD_, "validity":" ","aceid":1},\n {"subject":"A21CXXXX2-...","resources":[{"href":"/a/resource2"}], permission":_R___, "aceid":2}], "rowneruuid":"A21CXXXX-..."}
+ND->PT: RSP 2.04
+PT->ND: PUT /oic/sec/pstat {"om":0b0000,0000}
 PT<->ND: Close DTLS Session
-
 @enduml
+*/

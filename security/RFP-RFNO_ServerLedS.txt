@@ -24,13 +24,13 @@ ND->ND: /oic/sec/pstat.cm=bx0011,0000
 
 ==Obtain Credential Resources for this Device==
 ND->PT: GET /oic/sec/cred
-PT->ND: RSP [{"credid":"0", "subjectuuid":"uuidBSS","roleid":"","credtype":"1", Etc... },\n {"credid":"1", "subjectuuid":"uuidAPS","roleid":"","credtype":"1",Etc... },\n {"credid ":"2", "subjectuuid":"uuidAMS","roleid":"","credtype":"1",Etc... },\n {" credid ":"3", "subjectuuid":"uuidD1","roleid":"","credtype":"1",Etc... },\n  {" credid ":"4", "subjectuuid":"uuidD2","roleid":"","credtype":"1",Etc... },\n { Etc...}]
+PT->ND: RSP {"creds":[{"credid":0, "subjectuuid":"A21CXXXX2-...","roleid":{},"credtype":1, Etc... },\n {"credid":1, "subjectuuid":"APS21CXXXX-...","roleid":{},"credtype":1,Etc... },\n{"credid":2, "subjectuuid":"AMS21CXXXX-...","roleid":{},"credtype":1,Etc... },\n {"credid":3, "subjectuuid":"uuidD1","roleid":{},"credtype":1,Etc... },\n {"credid":4, "subjectuuid":"uuidD2","roleid":{},"credtype":1,Etc... },\n { Etc...}], "rowneruuid":"B0B0XXXX-..."}
 ND->ND: /oic/sec/pstat.cm=bx0010,0000
 
 ==Obtain ACL Resources for this Device==
-ND->PT: GET /oic/sec/acl
-PT->ND: RSP [{"subjectuuid":"uuidD1","resource":["/a/resource1"], "permission":"_RUD_", "validity":" ", "rowneruuid":"oic.sec.aps"},\n {"subjectuuid":"uuidD2","resource":["/a/resource2"], "permission":"_R___", ...},\n {Etc...}]
-ND->ND: /oic/sec/pstat.cm=bx0000,0000 
+ND->PT: GET /oic/sec/acl2
+PT->ND: RSP ["aclist2":[{"subject":{"uuidD1","resources":[{"href":"/a/resource1"}], "permission":_RUD_, "validity":" ", "aceid":1},\n {"subjectuuid":"uuidD2","resources":[{"href":""/a/resource2"}], "permission":"_R___", "aceid":2, ...}],\n"rowneruuid":"APS21CXXXX2-..."},{Etc...}]
+ND->ND: /oic/sec/pstat.cm=bx0000,0000
 
 ND<->PT: Close DTLS Session
 

@@ -1,9 +1,10 @@
 /*
 @startuml
-autonumber
 title OCF Server Led Provisioning\n with Multiple Service Providers
-participant "Provisioning\n Tool" as PT
 participant "New\n Device" as ND
+participant "Credential\n Management\n Service" as CMS
+participant "ACL\n Provisioning\n Service" as APS
+participant "Provisioning\n Tool" as PT
 
 ==Determine Self-provisioning is needed ==
 note over PT, ND
@@ -17,46 +18,32 @@ ND->ND: Verify /oic/sec/pstat.cm=bx0011,1100
 ==Begin Device Led Provisioning - Multiple Provisioning Services ==
 PT<->ND: Open a secure session with Provisioning Tool
 ND->PT: GET /oic/sec/cred
-PT->ND: RSP [{"credid":"0", "subjectuuid":"uuidBSS","roleid":"","credtype":"1", Etc... },\n {"credid":"1", "subjectuuid":"uuidAPS","roleid":"","credtype":"1", Etc... },\n {"credid":"2", "subjectuuid":"uuidCMS","roleid":"","credtype":"1", Etc... },\n {"credif":"3", "subjectuuid":"uuidAMS","roledid":"","credtype":"1", Etc... }
+PT->ND: RSP {"creds":[{"credid":0, "subjectuuid":"A21CXXXX-BSS","roleid":{},"credtype":1, Etc... },\n{"credid":1, "subjectuuid":"A21CXXXX-APS","roleid":{},"credtype":1, Etc... },\n{"credid":2, "subjectuuid":"A21CXXXX-CMS","roleid":{},"credtype":"1", Etc... },\n{"credid":3, "subjectuuid":"A21CXXXX-AMS","roledid":{},"credtype":1, Etc... }], "rowneruuid":"B0B0XXXX-..."}
 ND->ND: /oic/sec/pstat.cm=bx0011,0000
 ND->PT: Close DTLS session
-@enduml
-
-
-@startuml
-autonumber 10
-participant "New\n Device" as ND
-participant "Credential\n Management\n Service" as CMS
 
 ==Obtain Credential Resources for Device Interactions ==
 note over CMS, ND
-New device obtains credentials from its assigned Credential Provisioning Service
+New device obtains credentials from its assigned Credential Management Service
 end note
 ND->CMS: Open DTLS session with CMS
-ND->CMS: GET /oic/sec/cred?CredID > 3
-CMS->ND: RSP {"credid":"4", "subjectuuid":"uuidD1","roleid":"","credtype":"1", Etc... },\n  {"credid":"5", "subjectuuid":"uuidD2","roleid":"", "credtype":"1", Etc... },\n { Etc...}]
+ND->CMS: GET /oic/sec/cred?credid=3
+CMS->ND: RSP {"creds":[{"credid":4, "subjectuuid":"A21CXXXX1-","roleid":{},"credtype":1, Etc... },\n{"credid":5, "subjectuuid":"A21CXXXX2-","roleid":{}, "credtype":1, Etc... },\n{ Etc...}], "rowneruuid":"B0B0XXXX-..."}
 ND->ND: /oic/sec/pstat.cm=bx0010,0000
 ND<->CMS: Close DTLS Session
-
-@enduml
-
-@startuml
-autonumber 15
-participant "New\n Device" as ND
-participant "ACL\n Provisioning\n Service" as APS
 
 ==Obtain ACL Resources for Device Interactions ==
 note over APS, ND
 New device obtains ACLs from its assigned ACL Provisioning Service
 end note
 ND->APS: Open DTLS session with APS
-ND->APS: GET /oic/sec/acl
-APS->ND: RSP ["aclist":[{"subjectuuid":"uuidD1","resource":["/a/resource1"], "permission":"_RUD_", "validity":" "}], "rowneruuid":"oic.sec.aps"}],\n "aclist":[{"subjectuuid":"uuidD2","resource":["/a/resource2"], "permission":"_R___", ...}, {Etc...}]
+ND->APS: GET /oic/sec/acl2
+APS->ND: RSP {"aclist2":[{"subjectuuid":"A21CXXXX1","resources":[{"href":"/a/resource1"}], "permission":_RUD_, "validity":" ", "aceid":1}, \n{"subjectuuid":"A23CXXXX1","resources":[{"href":"/a/resource2"}], "permission":_R___, ..., "aceid":2}, {Etc...}], "rowneruuid":"A21CXXXXX"}}
 ND->APS: GET /oic/sec/sacl
-APS->ND: RSP ["aclist":[{"subjectuuid":"uuidD3","resource":["/a/resource3"], "permission":"_RUD_", "validity":" "}], "rowneruuid":"oic.sec.aps"},\n "aclist":[{"subjectuuid":"uuidD4","resource":["/a/resource4"], "permission":"_R___", ...}], "signature":"<SIGNATURE>"]
+APS->ND: RSP {"aclist2":[{"subjectuuid":"A23CXXXX1","resources":[{"href":"/a/resource3"}], "permission":_RUD_, "validity":" ", "aceid":3}, \n{"subjectuuid":"A24CXXXX1","resource":["/a/resource4"], "permission":"_R___", ..., "aceid":4}], "signature":"<SIGNATURE>"}}
 ND->APS: GET /oic/sec/amacl
-APS->ND: RSP ["resource":[{"/a/resource5"}, {/a/resource6}, {"/a/resource7"}]]
-ND->ND: /oic/sec/pstat.cm=bx0000,0000 
+APS->ND: RSP {"resources":[{"href":"/a/resource5"}, {"href":"/a/resource6"}, {"href":"/a/resource7"}]}
+ND->ND: /oic/sec/pstat.cm=bx0000,0000
 ND<->APS: Close DTLS Session
 
 @enduml
